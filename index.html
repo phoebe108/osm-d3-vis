@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scrolling Sections</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="container">
+    <div id='graphic'>
+        <div id='sections'>
+            <section class="step">
+                <div class="title">OpenStreetMap </div>
+                A quick visual dive into OpenStreetMap features and tags.
+            </section>
+            <section class="step">
+                <div class="title">OpenStreetMap </div>
+                With particular emphasis on tags related to Women's resources.
+            </section>
+            <section class="step">
+                <div class="title">Identified tags </div>
+                The OSM community has identified <a href="http://wiki.openstreetmap.org/wiki/Tagging_in_Support_of_Women_and_Girls">a list</a> of several tags that support women and girls.
+            </section>
+            <section class="step">
+                <div class="title">Edits Over Time</div>
+                But their growth rate, in comparison to other OSM tags, has not been so speedy.
+            </section>
+            <section class="step">
+                <div class="title">Features by Location</div>
+                Several States contain OSM features with a large number of women-resources tags.
+            </section>
+            <section class="step">
+                <div class="title">Features by Location</div>
+                And the rest of the US is recognizing their significance.
+            </section>
+        </div>
+        <div id='vis'>
+        </div>
+        <!--<div id="extra-space">-->
+        </div>
+    </div>
+</div>
+
+
+<script src="./js/d3.min.js"></script>
+<script src="./js/queue.js"></script>
+<script src="./js/d3.layout.cloud.js"></script>
+<script src="./js/topojson.min.js"></script>
+<script src="./js/scroller.js"></script>
+<script src="./js/sections.js"></script>
+</body>
+</html>
