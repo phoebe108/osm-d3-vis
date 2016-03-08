@@ -288,7 +288,7 @@ var scrollVis = function () {
                 return y(d.count);
             });
 
-        d3.csv("../data/line_graph_data.csv", type, function (error, data) {
+        d3.csv("data/line_graph_data.csv", type, function (error, data) {
 
             // Filter data
             var values =data.filter(function (d) {
@@ -732,11 +732,9 @@ var valueByState = d3.map();
 
 // get data and continue once data is ready
 queue()
-    .defer(d3.json, "../data/usa_states_topo.json")
-    .defer(d3.csv, "../data/map_data.csv", function (d) {
+    .defer(d3.json, "data/usa_states_topo.json")
+    .defer(d3.csv, "data/map_data.csv", function (d) {
         valueByState.set(d.adm1_name, +d.count);
     })
-    .defer(d3.csv, "../data/word_cloud_data.csv")
+    .defer(d3.csv, "data/word_cloud_data.csv")
     .await(display);
-
-// d3.csv("../data/readme.csv", type, function(error, data) {...
