@@ -160,6 +160,7 @@ var scrollVis = function () {
             .attr("y", height / 4)
             .style("font-size", "90px")
             .style("fill", "rgb(222,62,49)")
+            .attr("transform", "translate(-25," + 0 + ")")
             .text("&")
             .attr("opacity", 0);
 
@@ -262,10 +263,10 @@ var scrollVis = function () {
 
         /*Line Graph*/
         // code based on http://bl.ocks.org/markmarkoh/8700606
-        var parse = d3.time.format("%b %Y").parse;
+        var parse = d3.time.format("%b-%y").parse;
 
         // Scales and axes. Note the inverted domain for the y-scale: bigger is up!
-        var x = d3.time.scale().range([0, width]),
+        var x = d3.time.scale().range([0, (width-30)]),
             y = d3.scale.linear().range([height, 0]),
             xAxis = d3.svg.axis().scale(x).tickSize(-height).tickSubdivide(true),
             yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
@@ -284,28 +285,28 @@ var scrollVis = function () {
                 return x(d.date);
             })
             .y(function (d) {
-                return y(d.price);
+                return y(d.count);
             });
 
-        d3.csv("../data/readme.csv", type, function (error, data) {
+        d3.csv("../data/line_graph_data.csv", type, function (error, data) {
 
-            // Filter to one symbol; the S&P 500.
-            var values = data.filter(function (d) {
-                return d.symbol == "AMZN";
+            // Filter data
+            var values =data.filter(function (d) {
+                return d.tag == "pub";
             });
 
-            var msft = data.filter(function (d) {
-                return d.symbol == "MSFT";
+            var beauty = data.filter(function (d) {
+                return d.tag == "beauty";
             });
 
             //var ibm = data.filter(function (d) {
             //    return d.symbol == 'IBM';
             //});
 
-            // Compute the minimum and maximum date, and the maximum price.
+            // Compute the minimum and maximum date, and the maximum count
             x.domain([values[0].date, values[values.length - 1].date]);
             y.domain([0, d3.max(values, function (d) {
-                return d.price;
+                return d.count;
             })]).nice();
 
             // Add an SVG element with the desired dimensions and margin.
@@ -329,16 +330,53 @@ var scrollVis = function () {
                 .attr("opacity", 0)
                 .call(xAxis);
 
+            g.append("text")
+                .attr("transform", "translate(" + 75 + "," + 100 + ")")
+                .attr("dy", ".35em")
+                .attr("text-anchor", "start")
+                .attr("class", "linelabel")
+                .style("fill", "black")
+                .style("font-size", "16px")
+                .text("OSM Seattle Edit History")
+                .attr("opacity", 0);
+
             // Add the y-axis.
             g.append("g")
                 .attr("class", "y axis")
-                .attr("transform", "translate(" + width + ",0)")
+                .attr("transform", "translate(" + (width-30) + ",0)")
                 .attr("opacity", 0)
-                .call(yAxis);
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("font-size", "12px")
+                .style("text-anchor", "end")
+                .text("# OSM Edits");
+
+            // label1
+            g.append("text")
+                .attr("transform", "translate(" + (320) + "," + (475) + ")")
+                .attr("dy", ".35em")
+                .attr("class", "linelabel")
+                .attr("text-anchor", "start")
+                .style("fill", "rgb(255, 127, 14)")
+                .attr("opacity", 0)
+                .text("shop ='beauty'");
+
+            // label2
+            g.append("text")
+                .attr("transform", "translate(" + (170) + "," + (350) + ")")
+                .attr("dy", ".35em")
+                .attr("class", "linelabel")
+                .attr("text-anchor", "start")
+                .style("fill", "steelblue")
+                .attr("opacity", 0)
+                .text("amenity ='pub'");
 
             var colors = d3.scale.category10();
             g.selectAll('.line')
-                .data([values, msft, /*ibm*/])
+                .data([values, beauty])
                 .enter()
                 .append('path')
                 .attr('class', 'line')
@@ -399,7 +437,7 @@ var scrollVis = function () {
         // Parse dates and numbers. We assume values are sorted by date.
         function type(d) {
             d.date = parse(d.date);
-            d.price = +d.price;
+            d.count = +d.count;
             return d;
         }
     };
@@ -475,6 +513,11 @@ var scrollVis = function () {
             .duration(600)
             .attr("opacity", 0);
 
+        g.selectAll(".linelabel")
+            .transition()
+            .duration(0)
+            .attr("opacity", 0);
+
         g.selectAll(".curtain")
             .transition()
             .duration(0)
@@ -505,11 +548,16 @@ var scrollVis = function () {
         g.selectAll("g")
             .selectAll(".cloudword")
             .transition()
-            .duration(600)
+            .duration(0)
             .delay(function (d, i) {
                 return 400 * (1 / parseInt(d.value));
             })
             .style("opacity", 0);
+
+        g.selectAll(".q8-9")
+            .transition()
+            .duration(0)
+            .attr("opacity", 0);
 
         g.selectAll(".map")
             .transition("visibility")
@@ -519,6 +567,11 @@ var scrollVis = function () {
         g.selectAll(".curtain")
             .transition()
             .duration(0)
+            .attr("opacity", 1.0);
+
+        g.selectAll(".linelabel")
+            .transition()
+            .duration(600)
             .attr("opacity", 1.0);
 
         g.selectAll(".axis")
@@ -563,6 +616,11 @@ var scrollVis = function () {
             .transition()
             .duration(600)
             .attr("opacity", 1.0);
+
+        g.selectAll(".linelabel")
+            .transition()
+            .duration(0)
+            .attr("opacity", 0);
 
         g.selectAll(".curtain")
             .transition()
