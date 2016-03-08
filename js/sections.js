@@ -392,7 +392,7 @@ var scrollVis = function () {
             // add 'curtain' rectangle to hide entire graph
             var curtain = g.append('rect')
                 .attr('x', -1 * width)
-                .attr('y', -1 * height)
+                .attr('y', -1 * (height+1))
                 .attr('height', height)
                 .attr('width', width)
                 .attr('class', 'curtain')
